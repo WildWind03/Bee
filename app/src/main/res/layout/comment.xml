@@ -3,7 +3,8 @@
                 android:id="@+id/department_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_margin="@dimen/recycle_view_margin">
 
     <TextView
             android:id="@+id/comment_author"
