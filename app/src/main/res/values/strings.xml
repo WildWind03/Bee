@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Bee</string>
+    <string name="content_description">image</string>
+    <string name="example_text">example_text</string>
+    <string name="example_rating">8.2/10</string>
+    <string name="example_organisation">Kuzina</string>
+    <string name="organisation_string">Organisation</string>
+    <string name="organisation_pattern">%1$s: %2$s</string>
+    <string name="product_rating_pattern">%1$s: %2$d%%</string>
+    <string name="rating">Rating</string>
+    <string name="example_item_name">Latte</string>
+    <string name="quotes">"%1$s"</string>
+    <string name="example_description">Latte with any syrup you like</string>
+</resources>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#fde900</color>
+    <color name="colorPrimaryDark">#cabb02</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="commentColor">#6c6769</color>
+    <color name="authorColor">#000000</color>
+</resources>
