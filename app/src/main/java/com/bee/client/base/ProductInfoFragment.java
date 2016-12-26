@@ -25,6 +25,7 @@ import com.bee.client.entity.Comment;
 import com.bee.client.entity.Product;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
 public class ProductInfoFragment  extends BaseFragment implements SensorEventListener {
@@ -38,7 +39,7 @@ public class ProductInfoFragment  extends BaseFragment implements SensorEventLis
     private static final int SHAKE_STOP_TIME = 3000;
 
     private long lastShakeEventTime;
-    private volatile int shakeCount;
+    private AtomicInteger shakeCount = new AtomicInteger(0);
 
     private SensorManager sensorManager;
     private Sensor accelerometer;
@@ -66,9 +67,9 @@ public class ProductInfoFragment  extends BaseFragment implements SensorEventLis
         protected Void doInBackground(Void... voids) {
 
             try {
-                while(shakeCount > 0 && !isCancelled()) {
+                while(shakeCount.get() > 0 && !isCancelled()) {
                     Thread.sleep(200);
-                    shakeCount -= 1;
+                    shakeCount.decrementAndGet();
                     publishProgress();
                 }
             } catch (InterruptedException e) {
@@ -82,7 +83,7 @@ public class ProductInfoFragment  extends BaseFragment implements SensorEventLis
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
 
-            final int newColor = 255 - shakeCount * 10;
+            final int newColor = 255 - shakeCount.get() * 10;
 
             if (newColor < 0) {
                 return;
@@ -168,14 +169,14 @@ public class ProductInfoFragment  extends BaseFragment implements SensorEventLis
             }
 
             if (lastShakeEventTime + SHAKE_STOP_TIME < now) {
-                shakeCount = 0;
+                shakeCount.set(0);
                 onShakeEventStopped();
             }
 
             lastShakeEventTime = now;
-            shakeCount++;
+            shakeCount.incrementAndGet();
 
-            onShakeEventHappened(shakeCount);
+            onShakeEventHappened(shakeCount.get());
         }
     }
 
