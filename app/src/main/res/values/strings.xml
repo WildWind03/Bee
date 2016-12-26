@@ -11,4 +11,5 @@
     <string name="example_item_name">Latte</string>
     <string name="quotes">"%1$s"</string>
     <string name="example_description">Latte with any syrup you like</string>
+    <string name="categories_item">Categories</string>
 </resources>

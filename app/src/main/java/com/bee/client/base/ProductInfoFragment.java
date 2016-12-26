@@ -2,7 +2,6 @@ package com.bee.client.base;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -16,9 +15,9 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.BindView;
 import com.nsu.alexander.apptemplate.BaseFragment;
 import com.nsu.alexander.apptemplate.R;
@@ -35,7 +34,7 @@ public class ProductInfoFragment  extends BaseFragment implements SensorEventLis
     private static final String PRODUCT_TAG = "PRODUCT_TAG";
 
     private static final float SHAKE_THRESHOLD = 2.7F;
-    private static final int MIN_PERDIOD_BETWEEN_SHAKE_EVENTS = 10;
+    private static final int MIN_PERIOD_BETWEEN_SHAKE_EVENTS = 10;
     private static final int SHAKE_STOP_TIME = 3000;
 
     private long lastShakeEventTime;
@@ -128,7 +127,8 @@ public class ProductInfoFragment  extends BaseFragment implements SensorEventLis
         listOfComments.setAdapter(commentAdapter);
         listOfComments.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.organisation_pattern, product.getOrganisation(), product.getName()));
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        toolbar.setTitle(getString(R.string.organisation_pattern, product.getOrganisation(), product.getName()));
     }
 
     @Override
@@ -163,7 +163,7 @@ public class ProductInfoFragment  extends BaseFragment implements SensorEventLis
         if (gForce > SHAKE_THRESHOLD) {
             final long now = System.currentTimeMillis();
 
-            if (lastShakeEventTime + MIN_PERDIOD_BETWEEN_SHAKE_EVENTS > now) {
+            if (lastShakeEventTime + MIN_PERIOD_BETWEEN_SHAKE_EVENTS > now) {
                 return;
             }
 
