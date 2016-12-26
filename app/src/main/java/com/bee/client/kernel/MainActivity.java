@@ -102,7 +102,7 @@ public class MainActivity extends BaseActivity {
                     new Category("Shawarma", 4),
                     new Category("Milkshakes", 5)};
 
-            CategoryListFragment categoryListFragment = CategoryListFragment.newInstance(category);
+            CategoryListFragment categoryListFragment = CategoryListFragment.newInstance();
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.container_for_fragments, categoryListFragment, CategoryListFragment.class.getName())
@@ -128,14 +128,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void onCategoryListClicked() {
-            Category[] category = new Category[] {
-                    new Category("Coffee", 1),
-                    new Category("Pizza", 2),
-                    new Category("Burgers", 3),
-                    new Category("Shawarma", 4),
-                    new Category("Milkshakes", 5)};
-
-            CategoryListFragment categoryListFragment = CategoryListFragment.newInstance(category);
+            CategoryListFragment categoryListFragment = CategoryListFragment.newInstance();
 
             getSupportFragmentManager()
                     .beginTransaction()

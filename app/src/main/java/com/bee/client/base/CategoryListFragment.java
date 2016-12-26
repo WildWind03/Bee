@@ -16,6 +16,9 @@ import com.bee.client.entity.Product;
 import com.nsu.alexander.apptemplate.BaseFragment;
 import com.nsu.alexander.apptemplate.R;
 import org.greenrobot.eventbus.EventBus;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 import java.util.Arrays;
 import java.util.List;
@@ -97,26 +100,39 @@ public class CategoryListFragment extends BaseFragment {
         }
     }
 
-    public static CategoryListFragment newInstance(Category[] categories) {
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArray(CATEGORIES_TAG, categories);
-
-        CategoryListFragment categoryItemFragment = new CategoryListFragment();
-        categoryItemFragment.setArguments(bundle);
-
-        return categoryItemFragment;
+    public static CategoryListFragment newInstance() {
+        return new CategoryListFragment();
     }
 
     @Override
     protected void onPostViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onPostViewCreated(view, savedInstanceState);
 
-        Category[] categories = (Category[]) getArguments().get(CATEGORIES_TAG);
-        categoryList.setAdapter(new CategoryListAdapter(Arrays.asList(categories)));
-        categoryList.setLayoutManager(new LinearLayoutManager(getContext()));
+        LoadCategoriesService loadCategoriesService = LoadCategoriesSingleton.getInstance();
 
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.setTitle("Choose category");
+        loadCategoriesService
+                .loadCategories()
+                .observeOn(Schedulers.newThread())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<Category>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<Category> categories) {
+                        categoryList.setAdapter(new CategoryListAdapter(categories));
+                        categoryList.setLayoutManager(new LinearLayoutManager(getContext()));
+                        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+                        toolbar.setTitle("Choose category");
+                    }
+                });
 
     }
 
