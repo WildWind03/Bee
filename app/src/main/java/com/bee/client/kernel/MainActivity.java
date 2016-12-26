@@ -2,6 +2,7 @@ package com.bee.client.kernel;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import butterknife.BindView;
 import com.bee.client.auth.LoginFragment;
@@ -9,7 +10,9 @@ import com.bee.client.auth.RegisterFragment;
 import com.bee.client.auth.ToLoginFragmentEvent;
 import com.bee.client.auth.ToRegisterFragmentEvent;
 import com.bee.client.base.CategoryListFragment;
+import com.bee.client.base.CategorySelectedItemEvent;
 import com.bee.client.base.ProductInfoFragment;
+import com.bee.client.base.ProductListFragment;
 import com.bee.client.entity.Category;
 import com.bee.client.entity.Comment;
 import com.bee.client.entity.Product;
@@ -30,6 +33,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MainActivity extends BaseActivity {
+
+    Comment[] comments = new Comment[]{new Comment("Disgusting", "user10101", 0), new Comment("The best latte in Novosibirsk", "Ivan", 6), new Comment("The worst coffee I have ever tasted", "Roman", 0)};
+    Product product = new Product("Latte", "Can be made with any syrup you like", "Kuzina", 80);
 
     private final static int LOGIN_ID = 0;
     private final static int CATEGORY_LIST_ID = 1;
@@ -56,6 +62,7 @@ public class MainActivity extends BaseActivity {
                 .withName(R.string.categories_item)
                 .withIcon(R.drawable.ic_list_black_24dp);
 
+        toolbar.setTitle("Choose category");
         setSupportActionBar(toolbar);
 
         accountHeader = new AccountHeaderBuilder()
@@ -87,12 +94,19 @@ public class MainActivity extends BaseActivity {
 
         toolbar.setCollapsible(true);
 
-        if (null == getSupportFragmentManager().findFragmentByTag(ProductInfoFragment.class.getName())) {
-            Comment[] comments = new Comment[]{new Comment("Disgusting", "user10101", 0), new Comment("The best latte in Novosibirsk", "Ivan", 6), new Comment("The worst coffee I have ever tasted", "Roman", 0)};
-            Product product = new Product("Latte", "Can be made with any syrup you like", "Kuzina", 80);
+        if (null == getSupportFragmentManager().findFragmentByTag(CategoryListFragment.class.getName())) {
+            Category[] category = new Category[] {
+                    new Category("Coffee", 1),
+                    new Category("Pizza", 2),
+                    new Category("Burgers", 3),
+                    new Category("Shawarma", 4),
+                    new Category("Milkshakes", 5)};
 
-            ProductInfoFragment productInfoFragment = ProductInfoFragment.newInstance(new ArrayList<>(Arrays.asList(comments)), product);
-            getSupportFragmentManager().beginTransaction().add(R.id.container_for_fragments, productInfoFragment, ProductInfoFragment.class.getName()).commit();
+            CategoryListFragment categoryListFragment = CategoryListFragment.newInstance(category);
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.container_for_fragments, categoryListFragment, CategoryListFragment.class.getName())
+                    .commit();
         }
     }
 
@@ -114,46 +128,70 @@ public class MainActivity extends BaseActivity {
     }
 
     private void onCategoryListClicked() {
-        if (null == getSupportFragmentManager().findFragmentByTag(CategoryListFragment.class.getName())) {
             Category[] category = new Category[] {
                     new Category("Coffee", 1),
                     new Category("Pizza", 2),
                     new Category("Burgers", 3),
-                    new Category("Shawarma", 4)};
+                    new Category("Shawarma", 4),
+                    new Category("Milkshakes", 5)};
 
             CategoryListFragment categoryListFragment = CategoryListFragment.newInstance(category);
-            getSupportFragmentManager().beginTransaction().replace(R.id.container_for_fragments, categoryListFragment, ProductInfoFragment.class.getName()).commit();
-        }
 
-        /*if (null == getSupportFragmentManager().findFragmentByTag(ProductInfoFragment.class.getName())) {
-            Comment[] comments = new Comment[]{new Comment("Disgusting", "user10101", 0), new Comment("The best latte in Novosibirsk", "Ivan", 6), new Comment("The worst coffee I have ever tasted", "Roman", 0)};
-            Product product = new Product("Latte", "Can be made with any syrup you like", "Kuzina", 80);
-
-            ProductInfoFragment productInfoFragment = ProductInfoFragment.newInstance(new ArrayList<>(Arrays.asList(comments)), product);
-            getSupportFragmentManager().beginTransaction().replace(R.id.container_for_fragments, productInfoFragment, ProductInfoFragment.class.getName()).commit();
-        }*/
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.container_for_fragments, categoryListFragment, ProductInfoFragment.class.getName())
+                    .addToBackStack(ProductInfoFragment.class.getName())
+                    .commit();
     }
 
     private void onAccountHeaderClicked() {
-        if (null == getSupportFragmentManager().findFragmentByTag(LoginFragment.class.getName())) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.container_for_fragments, new LoginFragment()).commit();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.container_for_fragments, new LoginFragment(), LoginFragment.class.getName())
+                    .commit();
             toolbar.setTitle("Sign in");
-        }
     }
 
     @Subscribe
     void onToLoginFragmentEvent(ToLoginFragmentEvent toLoginFragmentEvent) {
-        if (null == getSupportFragmentManager().findFragmentByTag(LoginFragment.class.getName())) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.container_for_fragments, new LoginFragment()).commit();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.container_for_fragments, new LoginFragment(), LoginFragment.class.getName())
+                    .commit();
             toolbar.setTitle("Sign in");
-        }
     }
 
     @Subscribe
     void onRegisterFragmentEvent(ToRegisterFragmentEvent toRegisterFragmentEven) {
-        if (null == getSupportFragmentManager().findFragmentByTag(LoginFragment.class.getName())) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.container_for_fragments, new RegisterFragment()).commit();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.container_for_fragments, new RegisterFragment(), RegisterFragment.class.getName())
+                    .commit();
             toolbar.setTitle("Sign up");
+    }
+
+    @Subscribe
+    void onCategorySelected(CategorySelectedItemEvent categorySelectedItemEvent) {
+        Product[] products;
+
+        if (1 == categorySelectedItemEvent.getCategoryId()) {
+             products = new Product[] {product};
+        } else {
+            return;
         }
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.container_for_fragments, ProductListFragment.newInstance(products), ProductListFragment.class.getName())
+                    .addToBackStack(ProductListFragment.class.getName())
+                    .commit();
+    }
+
+    @Subscribe
+    void onProductSelected(Product product) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.container_for_fragments, ProductInfoFragment.newInstance(new ArrayList<>(Arrays.asList(comments)), product), ProductInfoFragment.class.getName())
+                    .addToBackStack(ProductInfoFragment.class.getName())
+                    .commit();
     }
 }

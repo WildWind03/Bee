@@ -4,15 +4,18 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import butterknife.BindView;
 import com.bee.client.entity.Category;
-import com.bee.client.entity.Comment;
+import com.bee.client.entity.Product;
 import com.nsu.alexander.apptemplate.BaseFragment;
 import com.nsu.alexander.apptemplate.R;
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,7 +39,40 @@ public class CategoryListFragment extends BaseFragment {
 
         @Override
         public CategoryListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.category_item, parent, false);
+            final View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.category_item, parent, false);
+
+            View.OnClickListener listener = new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int itemPosition = categoryList.getChildLayoutPosition(view);
+                    Category category = categories.get(itemPosition);
+                    EventBus.getDefault().post(new CategorySelectedItemEvent(category.getId()));
+                }
+            };
+
+            v.setOnClickListener(listener);
+
+            final TextView textView =  (TextView) v.findViewById(R.id.category_name);
+
+            textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    TextView textView1 = (TextView) view;
+
+                    String value = textView1.getText().toString();
+
+                    int pos = 0;
+                    for (Category category : categories) {
+                        if (category.getName().equals(value)) {
+                            break;
+                        }
+
+                        pos++;
+                    }
+
+                    EventBus.getDefault().post(new CategorySelectedItemEvent(categories.get(pos).getId()));
+                }
+            });
             return new CategoryListAdapter.ViewHolder(v);
         }
 
@@ -78,6 +114,9 @@ public class CategoryListFragment extends BaseFragment {
         Category[] categories = (Category[]) getArguments().get(CATEGORIES_TAG);
         categoryList.setAdapter(new CategoryListAdapter(Arrays.asList(categories)));
         categoryList.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        toolbar.setTitle("Choose category");
 
     }
 
