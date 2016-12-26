@@ -8,7 +8,9 @@ import com.bee.client.auth.LoginFragment;
 import com.bee.client.auth.RegisterFragment;
 import com.bee.client.auth.ToLoginFragmentEvent;
 import com.bee.client.auth.ToRegisterFragmentEvent;
+import com.bee.client.base.CategoryListFragment;
 import com.bee.client.base.ProductInfoFragment;
+import com.bee.client.entity.Category;
 import com.bee.client.entity.Comment;
 import com.bee.client.entity.Product;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -112,13 +114,24 @@ public class MainActivity extends BaseActivity {
     }
 
     private void onCategoryListClicked() {
-        if (null == getSupportFragmentManager().findFragmentByTag(ProductInfoFragment.class.getName())) {
+        if (null == getSupportFragmentManager().findFragmentByTag(CategoryListFragment.class.getName())) {
+            Category[] category = new Category[] {
+                    new Category("Coffee", 1),
+                    new Category("Pizza", 2),
+                    new Category("Burgers", 3),
+                    new Category("Shawarma", 4)};
+
+            CategoryListFragment categoryListFragment = CategoryListFragment.newInstance(category);
+            getSupportFragmentManager().beginTransaction().replace(R.id.container_for_fragments, categoryListFragment, ProductInfoFragment.class.getName()).commit();
+        }
+
+        /*if (null == getSupportFragmentManager().findFragmentByTag(ProductInfoFragment.class.getName())) {
             Comment[] comments = new Comment[]{new Comment("Disgusting", "user10101", 0), new Comment("The best latte in Novosibirsk", "Ivan", 6), new Comment("The worst coffee I have ever tasted", "Roman", 0)};
             Product product = new Product("Latte", "Can be made with any syrup you like", "Kuzina", 80);
 
             ProductInfoFragment productInfoFragment = ProductInfoFragment.newInstance(new ArrayList<>(Arrays.asList(comments)), product);
             getSupportFragmentManager().beginTransaction().replace(R.id.container_for_fragments, productInfoFragment, ProductInfoFragment.class.getName()).commit();
-        }
+        }*/
     }
 
     private void onAccountHeaderClicked() {
