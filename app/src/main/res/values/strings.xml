@@ -12,4 +12,12 @@
     <string name="quotes">"%1$s"</string>
     <string name="example_description">Latte with any syrup you like</string>
     <string name="categories_item">Categories</string>
+    <string name="email_text">Email</string>
+    <string name="password_text">Password</string>
+    <string name="login_text">Sign in</string>
+    <string name="turn_on_register_mode">No account yet? Create one</string>
+    <string name="app_logo_text">Logo of the app</string>
+    <string name="name_text">Username</string>
+    <string name="create_account_text">Sign up</string>
+    <string name="turn_on_login_mode">Already a member? Login</string>
 </resources>

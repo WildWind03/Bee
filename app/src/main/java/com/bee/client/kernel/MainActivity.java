@@ -1,10 +1,13 @@
 package com.bee.client.kernel;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import butterknife.BindView;
+import com.bee.client.auth.LoginFragment;
+import com.bee.client.auth.RegisterFragment;
+import com.bee.client.auth.ToLoginFragmentEvent;
+import com.bee.client.auth.ToRegisterFragmentEvent;
 import com.bee.client.base.ProductInfoFragment;
 import com.bee.client.entity.Comment;
 import com.bee.client.entity.Product;
@@ -18,6 +21,8 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.nsu.alexander.apptemplate.BaseActivity;
 import com.nsu.alexander.apptemplate.R;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,7 +64,7 @@ public class MainActivity extends BaseActivity {
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
                     public boolean onProfileChanged(View view, IProfile profile, boolean current) {
-                        onAccoundHeaderClicked();
+                        onAccountHeaderClicked();
                         return false;
                     }
                 })
@@ -80,7 +85,6 @@ public class MainActivity extends BaseActivity {
 
         toolbar.setCollapsible(true);
 
-
         if (null == getSupportFragmentManager().findFragmentByTag(ProductInfoFragment.class.getName())) {
             Comment[] comments = new Comment[]{new Comment("Disgusting", "user10101", 0), new Comment("The best latte in Novosibirsk", "Ivan", 6), new Comment("The worst coffee I have ever tasted", "Roman", 0)};
             Product product = new Product("Latte", "Can be made with any syrup you like", "Kuzina", 80);
@@ -91,13 +95,52 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     protected int getLayout() {
         return R.layout.activity_main;
     }
 
     private void onCategoryListClicked() {
+        if (null == getSupportFragmentManager().findFragmentByTag(ProductInfoFragment.class.getName())) {
+            Comment[] comments = new Comment[]{new Comment("Disgusting", "user10101", 0), new Comment("The best latte in Novosibirsk", "Ivan", 6), new Comment("The worst coffee I have ever tasted", "Roman", 0)};
+            Product product = new Product("Latte", "Can be made with any syrup you like", "Kuzina", 80);
+
+            ProductInfoFragment productInfoFragment = ProductInfoFragment.newInstance(new ArrayList<>(Arrays.asList(comments)), product);
+            getSupportFragmentManager().beginTransaction().replace(R.id.container_for_fragments, productInfoFragment, ProductInfoFragment.class.getName()).commit();
+        }
     }
 
-    private void onAccoundHeaderClicked() {
+    private void onAccountHeaderClicked() {
+        if (null == getSupportFragmentManager().findFragmentByTag(LoginFragment.class.getName())) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.container_for_fragments, new LoginFragment()).commit();
+            toolbar.setTitle("Sign in");
+        }
+    }
+
+    @Subscribe
+    void onToLoginFragmentEvent(ToLoginFragmentEvent toLoginFragmentEvent) {
+        if (null == getSupportFragmentManager().findFragmentByTag(LoginFragment.class.getName())) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.container_for_fragments, new LoginFragment()).commit();
+            toolbar.setTitle("Sign in");
+        }
+    }
+
+    @Subscribe
+    void onRegisterFragmentEvent(ToRegisterFragmentEvent toRegisterFragmentEven) {
+        if (null == getSupportFragmentManager().findFragmentByTag(LoginFragment.class.getName())) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.container_for_fragments, new RegisterFragment()).commit();
+            toolbar.setTitle("Sign up");
+        }
     }
 }
