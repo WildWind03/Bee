@@ -148,8 +148,8 @@ public class MainActivity extends BaseActivity {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.container_for_fragments, new LoginFragment(), LoginFragment.class.getName())
+                    .addToBackStack(LoginFragment.class.getName())
                     .commit();
-            toolbar.setTitle("Sign in");
     }
 
     @Subscribe
@@ -157,8 +157,8 @@ public class MainActivity extends BaseActivity {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.container_for_fragments, new LoginFragment(), LoginFragment.class.getName())
+                    .addToBackStack(LoginFragment.class.getName())
                     .commit();
-            toolbar.setTitle("Sign in");
     }
 
     @Subscribe
@@ -166,8 +166,8 @@ public class MainActivity extends BaseActivity {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.container_for_fragments, new RegisterFragment(), RegisterFragment.class.getName())
+                    .addToBackStack(RegisterFragment.class.getName())
                     .commit();
-            toolbar.setTitle("Sign up");
     }
 
     @Subscribe
