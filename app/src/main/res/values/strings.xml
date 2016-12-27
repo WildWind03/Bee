@@ -20,4 +20,6 @@
     <string name="name_text">Username</string>
     <string name="create_account_text">Sign up</string>
     <string name="turn_on_login_mode">Already a member? Login</string>
+    <string name="title_error">So pity</string>
+    <string name="text_error">Unfortunately, the service is not available now</string>
 </resources>

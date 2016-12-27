@@ -31,4 +31,9 @@ public class LoginFragment extends BaseFragment {
     void onLinkSignUpClicked() {
         EventBus.getDefault().post(new ToRegisterFragmentEvent());
     }
+
+    @OnClick(R.id.btn_login)
+    void onClick() {
+        showMessage(getActivity().getString(R.string.title_error), getActivity().getString(R.string.text_error));
+    }
 }

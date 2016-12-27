@@ -20,7 +20,6 @@ public class RegisterFragment extends BaseFragment {
     protected void onPostViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onPostViewCreated(view, savedInstanceState);
 
-
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle("Sign up");
     }
@@ -33,5 +32,10 @@ public class RegisterFragment extends BaseFragment {
     @OnClick(R.id.link_login)
     void onLinkLoginClick() {
         EventBus.getDefault().post(new ToLoginFragmentEvent());
+    }
+
+    @OnClick(R.id.btn_signup)
+    void onClick() {
+        showMessage(getString(R.string.title_error), getString(R.string.text_error));
     }
 }
