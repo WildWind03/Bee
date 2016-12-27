@@ -157,6 +157,8 @@ public class ProductInfoFragment extends BaseFragment implements SensorEventList
         Glide
                 .with(this)
                 .load(DEFAULT_SITE + "/" + product.getOrganisation() + "/" + product.getName() + "/image")
+                .centerCrop()
+                .placeholder(R.drawable.placeholder)
                 .into(productImage);
 
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);

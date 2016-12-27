@@ -28,4 +28,12 @@
     <string name="choose_product_str">Choose product</string>
     <string name="sign_in_str">Sign in</string>
     <string name="sign_up_str">Sign up</string>
+
+    <string name="unexpected_error_message">Unexpected error</string>
+    <string name="long_username_error_message">Username is too long. Max length is 16 characters</string>
+    <string name="long_password_error_message">Password is too long. Max length is 16 characters</string>
+    <string name="invalid_email_error_message">Invalid email</string>
+    <string name="short_password_error_message">The password should have at least 6 characters</string>
+    <string name="short_username_error_message">Invalid username. Min length is 2 characters</string>
+    <string name="invalid_data">Invalid data</string>
 </resources>

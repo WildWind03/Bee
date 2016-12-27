@@ -33,6 +33,10 @@ public abstract class BaseFragment extends Fragment {
         showMessage(title, message, null);
     }
 
+    protected void showMessage(int titleResId, String message) {
+        showMessage(getString(titleResId), message);
+    }
+
     protected void showMessage(String title, String message, final Runnable runnable) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog
                 .Builder(getContext())
