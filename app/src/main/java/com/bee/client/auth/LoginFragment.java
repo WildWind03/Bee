@@ -19,7 +19,7 @@ public class LoginFragment extends BaseFragment {
         super.onPostViewCreated(view, savedInstanceState);
 
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.setTitle("Sign in");
+        toolbar.setTitle(R.string.sign_in_str);
     }
 
     @Override

@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 import java.util.logging.Logger;
 
-public class Product implements Parcelable{
+public class Product implements Parcelable {
     private static final Logger logger = Logger.getLogger(Product.class.getName());
     private final String name;
     private final String description;

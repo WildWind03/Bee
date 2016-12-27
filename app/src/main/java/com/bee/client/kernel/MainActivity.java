@@ -12,7 +12,6 @@ import com.bee.client.base.CategoryListFragment;
 import com.bee.client.base.ProductInfoFragment;
 import com.bee.client.base.ProductListFragment;
 import com.bee.client.entity.Category;
-import com.bee.client.entity.Comment;
 import com.bee.client.entity.Product;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -29,9 +28,6 @@ import org.greenrobot.eventbus.Subscribe;
 
 public class MainActivity extends BaseActivity {
 
-    private final static int LOGIN_ID = 0;
-    private final static int CATEGORY_LIST_ID = 1;
-
     @BindView(R.id.toolbar)
     protected Toolbar toolbar;
 
@@ -40,18 +36,17 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         IProfile iProfile = new ProfileDrawerItem()
-                .withEmail("Email")
-                .withName("Username");
+                .withEmail(getString(R.string.email_profile))
+                .withName(getString(R.string.username_profile));
 
         PrimaryDrawerItem listOfCategoriesItem = new PrimaryDrawerItem();
         listOfCategoriesItem
-                .withIdentifier(CATEGORY_LIST_ID)
                 .withTextColorRes(android.R.color.black)
                 .withSelectedTextColorRes(R.color.colorPrimaryDark)
                 .withName(R.string.categories_item)
                 .withIcon(R.drawable.ic_list_black_24dp);
 
-        toolbar.setTitle("Choose category");
+        toolbar.setTitle(getString(R.string.choose_category_str));
         setSupportActionBar(toolbar);
 
         AccountHeader accountHeader = new AccountHeaderBuilder()
@@ -110,39 +105,39 @@ public class MainActivity extends BaseActivity {
     }
 
     private void onCategoryListClicked() {
-            CategoryListFragment categoryListFragment = CategoryListFragment.newInstance();
+        CategoryListFragment categoryListFragment = CategoryListFragment.newInstance();
 
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.container_for_fragments, categoryListFragment, ProductInfoFragment.class.getName())
-                    .addToBackStack(ProductInfoFragment.class.getName())
-                    .commit();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container_for_fragments, categoryListFragment, ProductInfoFragment.class.getName())
+                .addToBackStack(ProductInfoFragment.class.getName())
+                .commit();
     }
 
     private void onAccountHeaderClicked() {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.container_for_fragments, new LoginFragment(), LoginFragment.class.getName())
-                    .addToBackStack(LoginFragment.class.getName())
-                    .commit();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container_for_fragments, new LoginFragment(), LoginFragment.class.getName())
+                .addToBackStack(LoginFragment.class.getName())
+                .commit();
     }
 
     @Subscribe
     void onToLoginFragmentEvent(ToLoginFragmentEvent toLoginFragmentEvent) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.container_for_fragments, new LoginFragment(), LoginFragment.class.getName())
-                    .addToBackStack(LoginFragment.class.getName())
-                    .commit();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container_for_fragments, new LoginFragment(), LoginFragment.class.getName())
+                .addToBackStack(LoginFragment.class.getName())
+                .commit();
     }
 
     @Subscribe
     void onRegisterFragmentEvent(ToRegisterFragmentEvent toRegisterFragmentEven) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.container_for_fragments, new RegisterFragment(), RegisterFragment.class.getName())
-                    .addToBackStack(RegisterFragment.class.getName())
-                    .commit();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container_for_fragments, new RegisterFragment(), RegisterFragment.class.getName())
+                .addToBackStack(RegisterFragment.class.getName())
+                .commit();
     }
 
     @Subscribe
@@ -152,14 +147,14 @@ public class MainActivity extends BaseActivity {
                 .replace(R.id.container_for_fragments, ProductListFragment.newInstance(category), ProductListFragment.class.getName())
                 .addToBackStack(ProductListFragment.class.getName())
                 .commit();
-}
+    }
 
     @Subscribe
     void onProductSelected(Product product) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.container_for_fragments, ProductInfoFragment.newInstance(product), ProductInfoFragment.class.getName())
-                    .addToBackStack(ProductInfoFragment.class.getName())
-                    .commit();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container_for_fragments, ProductInfoFragment.newInstance(product), ProductInfoFragment.class.getName())
+                .addToBackStack(ProductInfoFragment.class.getName())
+                .commit();
     }
 }

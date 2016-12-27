@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +15,11 @@ import com.bee.client.entity.Product;
 import com.nsu.alexander.apptemplate.BaseFragment;
 import com.nsu.alexander.apptemplate.R;
 import org.greenrobot.eventbus.EventBus;
-import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Observer;
 import java.util.logging.Logger;
 
 public class ProductListFragment extends BaseFragment {
@@ -49,7 +45,8 @@ public class ProductListFragment extends BaseFragment {
                 public void onClick(View view) {
                     int itemPosition = productList.getChildLayoutPosition(view);
                     Product product = products.get(itemPosition);
-                    EventBus.getDefault().post(product); }
+                    EventBus.getDefault().post(product);
+                }
             });
             return new ProductListFragment.ProductListAdapter.ViewHolder(v);
         }
@@ -99,7 +96,7 @@ public class ProductListFragment extends BaseFragment {
         productList.setLayoutManager(new LinearLayoutManager(getContext()));
 
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.setTitle("Choose product");
+        toolbar.setTitle(R.string.choose_product_str);
 
         loadProductsInCategoryService
                 .loadProducts(category.getName())

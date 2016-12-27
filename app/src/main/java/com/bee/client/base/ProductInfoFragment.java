@@ -12,7 +12,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -20,21 +19,20 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
+import com.bee.client.entity.Comment;
+import com.bee.client.entity.Product;
 import com.bumptech.glide.Glide;
 import com.nsu.alexander.apptemplate.BaseFragment;
 import com.nsu.alexander.apptemplate.R;
-import com.bee.client.entity.Comment;
-import com.bee.client.entity.Product;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
-public class ProductInfoFragment  extends BaseFragment implements SensorEventListener {
+public class ProductInfoFragment extends BaseFragment implements SensorEventListener {
     private static final Logger logger = Logger.getLogger(ProductInfoFragment.class.getName());
     private final static String DEFAULT_SITE = "http://androidtraining.noveogroup.com";
 
@@ -43,6 +41,8 @@ public class ProductInfoFragment  extends BaseFragment implements SensorEventLis
     private static final float SHAKE_THRESHOLD = 2.7F;
     private static final int MIN_PERIOD_BETWEEN_SHAKE_EVENTS = 10;
     private static final int SHAKE_STOP_TIME = 3000;
+    private static final int PERIOD_OF_DECREMENT = 200;
+    private static final int SHAKE_RATIO = 10;
 
     private long lastShakeEventTime;
     private AtomicInteger shakeCount = new AtomicInteger(0);
@@ -76,8 +76,8 @@ public class ProductInfoFragment  extends BaseFragment implements SensorEventLis
         protected Void doInBackground(Void... voids) {
 
             try {
-                while(shakeCount.get() > 0 && !isCancelled()) {
-                    Thread.sleep(200);
+                while (shakeCount.get() > 0 && !isCancelled()) {
+                    Thread.sleep(PERIOD_OF_DECREMENT);
                     shakeCount.decrementAndGet();
                     publishProgress();
                 }
@@ -92,13 +92,13 @@ public class ProductInfoFragment  extends BaseFragment implements SensorEventLis
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
 
-            final int newColor = 255 - shakeCount.get() * 10;
+            final int newColor = 255 - shakeCount.get() * SHAKE_RATIO;
 
             if (newColor < 0) {
                 return;
             }
 
-            listOfComments.setBackgroundColor(Color.rgb(255,255, newColor));
+            listOfComments.setBackgroundColor(Color.rgb(255, 255, newColor));
 
         }
 
@@ -125,7 +125,6 @@ public class ProductInfoFragment  extends BaseFragment implements SensorEventLis
         sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
-        //ArrayList<Comment> comments = getArguments().getParcelableArrayList(COMMENTS_TAG);
         Product product = getArguments().getParcelable(PRODUCT_TAG);
         organisationName.setText(getString(R.string.organisation_pattern, getString(R.string.organisation_string), product.getOrganisation()));
         averageRate.setText(getString(R.string.product_rating_pattern, getString(R.string.rating), product.getAverageRate()));
@@ -202,7 +201,6 @@ public class ProductInfoFragment  extends BaseFragment implements SensorEventLis
 
             if (lastShakeEventTime + SHAKE_STOP_TIME < now) {
                 shakeCount.set(0);
-                onShakeEventStopped();
             }
 
             lastShakeEventTime = now;
@@ -215,22 +213,18 @@ public class ProductInfoFragment  extends BaseFragment implements SensorEventLis
     @TargetApi(Build.VERSION_CODES.M)
     private void onShakeEventHappened(final int shakeCount) {
         appBarLayout.setExpanded(false, true);
-        final int newColor = 255 - shakeCount * 10;
+        final int newColor = 255 - shakeCount * SHAKE_RATIO;
 
         if (newColor < 0) {
             return;
         }
 
-        listOfComments.setBackgroundColor(Color.rgb(255,255, newColor));
+        listOfComments.setBackgroundColor(Color.rgb(255, 255, newColor));
 
         if (null == asyncTask) {
             asyncTask = new ColorAsyncTask();
             asyncTask.execute();
         }
-    }
-
-    private void onShakeEventStopped() {
-
     }
 
     @Override

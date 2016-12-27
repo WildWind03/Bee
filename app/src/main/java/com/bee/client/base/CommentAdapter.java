@@ -5,8 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import com.nsu.alexander.apptemplate.R;
 import com.bee.client.entity.Comment;
+import com.nsu.alexander.apptemplate.R;
 
 import java.util.List;
 import java.util.logging.Logger;

@@ -22,4 +22,10 @@
     <string name="turn_on_login_mode">Already a member? Login</string>
     <string name="title_error">So pity</string>
     <string name="text_error">Unfortunately, the service is not available now</string>
+    <string name="email_profile">Email</string>
+    <string name="username_profile">Username</string>
+    <string name="choose_category_str">Choose category</string>
+    <string name="choose_product_str">Choose product</string>
+    <string name="sign_in_str">Sign in</string>
+    <string name="sign_up_str">Sign up</string>
 </resources>

@@ -5,14 +5,12 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import butterknife.BindView;
 import com.bee.client.entity.Category;
-import com.bee.client.entity.Product;
 import com.nsu.alexander.apptemplate.BaseFragment;
 import com.nsu.alexander.apptemplate.R;
 import org.greenrobot.eventbus.EventBus;
@@ -20,14 +18,11 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
 public class CategoryListFragment extends BaseFragment {
     private static final Logger logger = Logger.getLogger(CategoryListFragment.class.getName());
-
-    private static final String CATEGORIES_TAG = "CATEGORIES_TAG";
 
     @BindView(R.id.category_list)
     protected RecyclerView categoryList;
@@ -49,13 +44,13 @@ public class CategoryListFragment extends BaseFragment {
                 public void onClick(View view) {
                     int itemPosition = categoryList.getChildLayoutPosition(view);
                     Category category = categories.get(itemPosition);
-                    EventBus.getDefault().post(new CategorySelectedItemEvent(category.getId()));
+                    EventBus.getDefault().post(category);
                 }
             };
 
             v.setOnClickListener(listener);
 
-            final TextView textView =  (TextView) v.findViewById(R.id.category_name);
+            final TextView textView = (TextView) v.findViewById(R.id.category_name);
 
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -73,7 +68,7 @@ public class CategoryListFragment extends BaseFragment {
                         pos++;
                     }
 
-                    EventBus.getDefault().post(categories.get(pos).getId());
+                    EventBus.getDefault().post(categories.get(pos));
                 }
             });
             return new CategoryListAdapter.ViewHolder(v);
@@ -111,7 +106,7 @@ public class CategoryListFragment extends BaseFragment {
         LoadCategoriesService loadCategoriesService = LoadCategoriesSingleton.getInstance();
 
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.setTitle("Choose category");
+        toolbar.setTitle(R.string.choose_category_str);
 
         categoryList.setLayoutManager(new LinearLayoutManager(getContext()));
 

@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.TextView;
-import butterknife.BindView;
 import butterknife.OnClick;
 import com.nsu.alexander.apptemplate.BaseFragment;
 import com.nsu.alexander.apptemplate.R;
@@ -21,7 +19,7 @@ public class RegisterFragment extends BaseFragment {
         super.onPostViewCreated(view, savedInstanceState);
 
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.setTitle("Sign up");
+        toolbar.setTitle(R.string.sign_up_str);
     }
 
     @Override

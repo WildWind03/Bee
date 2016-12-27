@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/department_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_margin="@dimen/recycle_view_margin">
+              android:id="@+id/department_layout"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:layout_margin="@dimen/recycle_view_margin">
 
     <TextView
             android:id="@+id/comment_author"
             android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="@string/app_name"
-              style="@style/Base.TextAppearance.AppCompat.Large"
-    android:textColor="@color/authorColor"/>
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            style="@style/Base.TextAppearance.AppCompat.Large"
+            android:textColor="@color/authorColor"/>
 
     <TextView
             android:id="@+id/comment_text"

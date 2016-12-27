@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface LoadProductCommentsService {
     @GET("/{organisation}/{product}/comments")
-    Observable<List<Comment>> loadComments (@Path("organisation") String organisation, @Path("product") String product);
+    Observable<List<Comment>> loadComments(@Path("organisation") String organisation, @Path("product") String product);
 }
