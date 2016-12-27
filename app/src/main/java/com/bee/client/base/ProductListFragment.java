@@ -16,14 +16,19 @@ import com.bee.client.entity.Product;
 import com.nsu.alexander.apptemplate.BaseFragment;
 import com.nsu.alexander.apptemplate.R;
 import org.greenrobot.eventbus.EventBus;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Observer;
 import java.util.logging.Logger;
 
 public class ProductListFragment extends BaseFragment {
     private static final Logger logger = Logger.getLogger(ProductListFragment.class.getName());
-    private static final String PRODUCT_TAG = "PRODUCT_TAG";
+    private static final String CATEGORY_TAG = "CATEGORY_TAG";
 
     @BindView(R.id.category_list)
     protected RecyclerView productList;
@@ -75,10 +80,10 @@ public class ProductListFragment extends BaseFragment {
         }
     }
 
-    public static ProductListFragment newInstance(Product[] products) {
+    public static ProductListFragment newInstance(Category category) {
         ProductListFragment productListFragment = new ProductListFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelableArray(PRODUCT_TAG, products);
+        bundle.putParcelable(CATEGORY_TAG, category);
         productListFragment.setArguments(bundle);
 
         return productListFragment;
@@ -88,12 +93,35 @@ public class ProductListFragment extends BaseFragment {
     protected void onPostViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onPostViewCreated(view, savedInstanceState);
 
-        Product[] products = (Product[]) getArguments().get(PRODUCT_TAG);
-        productList.setAdapter(new ProductListFragment.ProductListAdapter(Arrays.asList(products)));
+        Category category = (Category) getArguments().get(CATEGORY_TAG);
+
+        LoadProductsInCategoryService loadProductsInCategoryService = LoadProductsInCategorySingleton.getInstance();
+
         productList.setLayoutManager(new LinearLayoutManager(getContext()));
 
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle("Choose product");
+
+        loadProductsInCategoryService
+                .loadProducts(category.getName())
+                .observeOn(Schedulers.newThread())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<Product>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<Product> products) {
+                        productList.setAdapter(new ProductListFragment.ProductListAdapter(products));
+                    }
+                });
     }
 
     @Override

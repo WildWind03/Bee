@@ -4,10 +4,11 @@ import com.bee.client.entity.Product;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import rx.Observable;
 
 import java.util.List;
 
 public interface LoadProductsInCategoryService {
     @GET("categories/{category}/products")
-    Call<List<Product>> loadProducts(@Path("category") String category);
+    Observable<List<Product>> loadProducts(@Path("category") String category);
 }

@@ -73,7 +73,7 @@ public class CategoryListFragment extends BaseFragment {
                         pos++;
                     }
 
-                    EventBus.getDefault().post(new CategorySelectedItemEvent(categories.get(pos).getId()));
+                    EventBus.getDefault().post(categories.get(pos).getId());
                 }
             });
             return new CategoryListAdapter.ViewHolder(v);
@@ -110,10 +110,15 @@ public class CategoryListFragment extends BaseFragment {
 
         LoadCategoriesService loadCategoriesService = LoadCategoriesSingleton.getInstance();
 
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        toolbar.setTitle("Choose category");
+
+        categoryList.setLayoutManager(new LinearLayoutManager(getContext()));
+
         loadCategoriesService
                 .loadCategories()
-                .observeOn(Schedulers.newThread())
-                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.newThread())
                 .subscribe(new Subscriber<List<Category>>() {
                     @Override
                     public void onCompleted() {
@@ -128,9 +133,6 @@ public class CategoryListFragment extends BaseFragment {
                     @Override
                     public void onNext(List<Category> categories) {
                         categoryList.setAdapter(new CategoryListAdapter(categories));
-                        categoryList.setLayoutManager(new LinearLayoutManager(getContext()));
-                        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-                        toolbar.setTitle("Choose category");
                     }
                 });
 

@@ -95,13 +95,6 @@ public class MainActivity extends BaseActivity {
         toolbar.setCollapsible(true);
 
         if (null == getSupportFragmentManager().findFragmentByTag(CategoryListFragment.class.getName())) {
-            Category[] category = new Category[] {
-                    new Category("Coffee", 1),
-                    new Category("Pizza", 2),
-                    new Category("Burgers", 3),
-                    new Category("Shawarma", 4),
-                    new Category("Milkshakes", 5)};
-
             CategoryListFragment categoryListFragment = CategoryListFragment.newInstance();
             getSupportFragmentManager()
                     .beginTransaction()
@@ -164,20 +157,13 @@ public class MainActivity extends BaseActivity {
     }
 
     @Subscribe
-    void onCategorySelected(CategorySelectedItemEvent categorySelectedItemEvent) {
-        Product[] products;
-
-        if (1 == categorySelectedItemEvent.getCategoryId()) {
-             products = new Product[] {product};
-        } else {
-            return;
-        }
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.container_for_fragments, ProductListFragment.newInstance(products), ProductListFragment.class.getName())
-                    .addToBackStack(ProductListFragment.class.getName())
-                    .commit();
-    }
+    void onCategorySelected(Category category) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container_for_fragments, ProductListFragment.newInstance(category), ProductListFragment.class.getName())
+                .addToBackStack(ProductListFragment.class.getName())
+                .commit();
+}
 
     @Subscribe
     void onProductSelected(Product product) {

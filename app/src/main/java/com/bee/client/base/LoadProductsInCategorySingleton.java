@@ -1,15 +1,17 @@
 package com.bee.client.base;
 
-import okhttp3.HttpUrl;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class LoadCategoriesSingleton {
+import java.util.logging.Logger;
+
+public class LoadProductsInCategorySingleton {
+    private static final Logger logger = Logger.getLogger(LoadProductsInCategorySingleton.class.getName());
 
     private static class SingletonHolder {
         private final static String DEFAULT_SITE = "http://androidtraining.noveogroup.com";
-        public static LoadCategoriesService instance;
+        public static LoadProductsInCategoryService instance;
 
         static {
             Retrofit builder = new Retrofit.Builder()
@@ -18,15 +20,15 @@ public class LoadCategoriesSingleton {
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .build();
 
-            instance = builder.create(LoadCategoriesService.class);
+            instance = builder.create(LoadProductsInCategoryService.class);
         }
     }
 
-    public static LoadCategoriesService getInstance() {
-        return SingletonHolder.instance;
+    public static LoadProductsInCategoryService getInstance() {
+        return LoadProductsInCategorySingleton.SingletonHolder.instance;
     }
 
-    private LoadCategoriesSingleton() {
+    private LoadProductsInCategorySingleton() {
 
     }
 }
