@@ -9,16 +9,11 @@ public class Category implements Parcelable {
     private static final Logger logger = Logger.getLogger(Category.class.getName());
 
     private final String name;
-    private final int id;
-
-    public Category(String name, int id) {
-        this.name = name;
-        this.id = id;
-    }
+    private final String id;
 
     protected Category(Parcel in) {
         name = in.readString();
-        id = in.readInt();
+        id = in.readString();
     }
 
     public static final Creator<Category> CREATOR = new Creator<Category>() {
@@ -37,7 +32,7 @@ public class Category implements Parcelable {
         return name;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -49,6 +44,6 @@ public class Category implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(name);
-        parcel.writeInt(id);
+        parcel.writeString(id);
     }
 }

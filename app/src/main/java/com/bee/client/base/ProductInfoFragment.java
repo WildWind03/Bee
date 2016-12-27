@@ -132,7 +132,7 @@ public class ProductInfoFragment extends BaseFragment implements SensorEventList
 
         LoadProductCommentsSingleton
                 .getInstance()
-                .loadComments(product.getOrganisation(), product.getName())
+                .loadComments(product.getId())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(new Subscriber<List<Comment>>() {

@@ -7,23 +7,22 @@ import java.util.logging.Logger;
 
 public class Product implements Parcelable {
     private static final Logger logger = Logger.getLogger(Product.class.getName());
+    private final String id;
     private final String name;
     private final String description;
     private final double averageRate;
     private final String organisation;
-
-    public Product(String name, String description, String organisation, double averageRate) {
-        this.name = name;
-        this.description = description;
-        this.organisation = organisation;
-        this.averageRate = averageRate;
-    }
 
     protected Product(Parcel in) {
         name = in.readString();
         description = in.readString();
         averageRate = in.readInt();
         organisation = in.readString();
+        id = in.readString();
+    }
+
+    public String getId() {
+        return id;
     }
 
     public static final Creator<Product> CREATOR = new Creator<Product>() {
@@ -65,5 +64,6 @@ public class Product implements Parcelable {
         parcel.writeString(description);
         parcel.writeDouble(averageRate);
         parcel.writeString(organisation);
+        parcel.writeString(id);
     }
 }
