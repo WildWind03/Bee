@@ -17,21 +17,27 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
+import com.bumptech.glide.Glide;
 import com.nsu.alexander.apptemplate.BaseFragment;
 import com.nsu.alexander.apptemplate.R;
 import com.bee.client.entity.Comment;
 import com.bee.client.entity.Product;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
 public class ProductInfoFragment  extends BaseFragment implements SensorEventListener {
     private static final Logger logger = Logger.getLogger(ProductInfoFragment.class.getName());
+    private final static String DEFAULT_SITE = "http://androidtraining.noveogroup.com";
 
-    private static final String COMMENTS_TAG = "COMMENTS_TAG";
     private static final String PRODUCT_TAG = "PRODUCT_TAG";
 
     private static final float SHAKE_THRESHOLD = 2.7F;
@@ -45,6 +51,9 @@ public class ProductInfoFragment  extends BaseFragment implements SensorEventLis
     private Sensor accelerometer;
 
     private AsyncTask<Void, Integer, Void> asyncTask;
+
+    @BindView(R.id.toolbar_image)
+    protected ImageView productImage;
 
     @BindView(R.id.list_of_comments)
     protected RecyclerView listOfComments;
@@ -100,10 +109,9 @@ public class ProductInfoFragment  extends BaseFragment implements SensorEventLis
         }
     }
 
-    public static ProductInfoFragment newInstance(ArrayList<Comment> comments, Product product) {
+    public static ProductInfoFragment newInstance(Product product) {
         ProductInfoFragment productInfoFragment = new ProductInfoFragment();
         Bundle args = new Bundle();
-        args.putParcelableArrayList(COMMENTS_TAG, comments);
         args.putParcelable(PRODUCT_TAG, product);
         productInfoFragment.setArguments(args);
 
@@ -117,16 +125,40 @@ public class ProductInfoFragment  extends BaseFragment implements SensorEventLis
         sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
-        ArrayList<Comment> comments = getArguments().getParcelableArrayList(COMMENTS_TAG);
+        //ArrayList<Comment> comments = getArguments().getParcelableArrayList(COMMENTS_TAG);
         Product product = getArguments().getParcelable(PRODUCT_TAG);
         organisationName.setText(getString(R.string.organisation_pattern, getString(R.string.organisation_string), product.getOrganisation()));
         averageRate.setText(getString(R.string.product_rating_pattern, getString(R.string.rating), product.getAverageRate()));
         description.setText(product.getDescription());
 
-        CommentAdapter commentAdapter = new CommentAdapter(comments);
+        LoadProductCommentsSingleton
+                .getInstance()
+                .loadComments(product.getOrganisation(), product.getName())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(new Subscriber<List<Comment>>() {
+                    @Override
+                    public void onCompleted() {
 
-        listOfComments.setAdapter(commentAdapter);
-        listOfComments.setLayoutManager(new LinearLayoutManager(getContext()));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<Comment> comments) {
+                        CommentAdapter commentAdapter = new CommentAdapter(comments);
+                        listOfComments.setAdapter(commentAdapter);
+                        listOfComments.setLayoutManager(new LinearLayoutManager(getContext()));
+                    }
+                });
+
+        Glide
+                .with(this)
+                .load(DEFAULT_SITE + "/" + product.getOrganisation() + "/" + product.getName() + "/image")
+                .into(productImage);
 
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.organisation_pattern, product.getOrganisation(), product.getName()));

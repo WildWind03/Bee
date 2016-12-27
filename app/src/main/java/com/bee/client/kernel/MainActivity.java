@@ -2,7 +2,6 @@ package com.bee.client.kernel;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import butterknife.BindView;
 import com.bee.client.auth.LoginFragment;
@@ -10,7 +9,6 @@ import com.bee.client.auth.RegisterFragment;
 import com.bee.client.auth.ToLoginFragmentEvent;
 import com.bee.client.auth.ToRegisterFragmentEvent;
 import com.bee.client.base.CategoryListFragment;
-import com.bee.client.base.CategorySelectedItemEvent;
 import com.bee.client.base.ProductInfoFragment;
 import com.bee.client.base.ProductListFragment;
 import com.bee.client.entity.Category;
@@ -29,19 +27,10 @@ import com.nsu.alexander.apptemplate.R;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 public class MainActivity extends BaseActivity {
-
-    Comment[] comments = new Comment[]{new Comment("Disgusting", "user10101", 0), new Comment("The best latte in Novosibirsk", "Ivan", 6), new Comment("The worst coffee I have ever tasted", "Roman", 0)};
-    Product product = new Product("Latte", "Can be made with any syrup you like", "Kuzina", 80);
 
     private final static int LOGIN_ID = 0;
     private final static int CATEGORY_LIST_ID = 1;
-
-    private AccountHeader accountHeader;
-    private Drawer drawer;
 
     @BindView(R.id.toolbar)
     protected Toolbar toolbar;
@@ -65,7 +54,7 @@ public class MainActivity extends BaseActivity {
         toolbar.setTitle("Choose category");
         setSupportActionBar(toolbar);
 
-        accountHeader = new AccountHeaderBuilder()
+        AccountHeader accountHeader = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withTextColorRes(android.R.color.black)
                 .addProfiles(iProfile)
@@ -79,7 +68,7 @@ public class MainActivity extends BaseActivity {
                 })
                 .build();
 
-        drawer = new DrawerBuilder()
+        new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .withAccountHeader(accountHeader)
@@ -169,7 +158,7 @@ public class MainActivity extends BaseActivity {
     void onProductSelected(Product product) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.container_for_fragments, ProductInfoFragment.newInstance(new ArrayList<>(Arrays.asList(comments)), product), ProductInfoFragment.class.getName())
+                    .replace(R.id.container_for_fragments, ProductInfoFragment.newInstance(product), ProductInfoFragment.class.getName())
                     .addToBackStack(ProductInfoFragment.class.getName())
                     .commit();
     }

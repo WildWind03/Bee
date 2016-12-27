@@ -49,8 +49,7 @@ public class ProductListFragment extends BaseFragment {
                 public void onClick(View view) {
                     int itemPosition = productList.getChildLayoutPosition(view);
                     Product product = products.get(itemPosition);
-                    EventBus.getDefault().post(product);
-                }
+                    EventBus.getDefault().post(product); }
             });
             return new ProductListFragment.ProductListAdapter.ViewHolder(v);
         }
