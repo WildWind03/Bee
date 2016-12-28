@@ -12,6 +12,8 @@ public class Product implements Parcelable {
     private final String description;
     private final double averageRate;
     private final String organisation;
+    private final String categoryId;
+    private final String imageURL;
 
     protected Product(Parcel in) {
         name = in.readString();
@@ -19,6 +21,8 @@ public class Product implements Parcelable {
         averageRate = in.readInt();
         organisation = in.readString();
         id = in.readString();
+        categoryId = in.readString();
+        imageURL = in.readString();
     }
 
     public String getId() {
@@ -53,6 +57,10 @@ public class Product implements Parcelable {
         return organisation;
     }
 
+    public String getImageURL() {
+        return imageURL;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -65,5 +73,7 @@ public class Product implements Parcelable {
         parcel.writeDouble(averageRate);
         parcel.writeString(organisation);
         parcel.writeString(id);
+        parcel.writeString(categoryId);
+        parcel.writeString(imageURL);
     }
 }

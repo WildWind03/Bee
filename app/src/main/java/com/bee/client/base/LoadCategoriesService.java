@@ -7,6 +7,6 @@ import rx.Observable;
 import java.util.List;
 
 public interface LoadCategoriesService {
-    @GET("/categories")
+    @GET("categories")
     Observable<List<Category>> loadCategories();
 }

@@ -10,5 +10,5 @@ import java.util.List;
 
 public interface LoadProductCommentsService {
     @GET("/comments")
-    Observable<List<Comment>> loadComments(@Query("product") String id);
+    Observable<List<Comment>> loadComments(@Query("product_id") String id);
 }

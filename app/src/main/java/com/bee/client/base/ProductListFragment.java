@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindView;
 import com.bee.client.entity.Category;
 import com.bee.client.entity.Product;
@@ -99,9 +100,9 @@ public class ProductListFragment extends BaseFragment {
         toolbar.setTitle(R.string.choose_product_str);
 
         loadProductsInCategoryService
-                .loadProducts(category.getName())
-                .observeOn(Schedulers.newThread())
-                .subscribeOn(AndroidSchedulers.mainThread())
+                .loadProducts(category.getId())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.newThread())
                 .subscribe(new Subscriber<List<Product>>() {
                     @Override
                     public void onCompleted() {
@@ -110,7 +111,7 @@ public class ProductListFragment extends BaseFragment {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                     }
 
                     @Override

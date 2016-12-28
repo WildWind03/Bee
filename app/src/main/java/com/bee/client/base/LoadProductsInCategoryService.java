@@ -9,6 +9,6 @@ import rx.Observable;
 import java.util.List;
 
 public interface LoadProductsInCategoryService {
-    @GET("/products")
-    Observable<List<Product>> loadProducts(@Query("category") String category);
+    @GET("products")
+    Observable<List<Product>> loadProducts(@Query("category_id") String id);
 }

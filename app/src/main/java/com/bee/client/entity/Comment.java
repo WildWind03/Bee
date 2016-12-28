@@ -10,11 +10,13 @@ public class Comment implements Parcelable {
     private final String id;
     private final String text;
     private final String userName;
+    private final String productId;
 
     protected Comment(Parcel in) {
         text = in.readString();
         userName = in.readString();
         id = in.readString();
+        productId = in.readString();
     }
 
     public static final Creator<Comment> CREATOR = new Creator<Comment>() {
@@ -47,5 +49,6 @@ public class Comment implements Parcelable {
         parcel.writeString(text);
         parcel.writeString(userName);
         parcel.writeString(id);
+        parcel.writeString(productId);
     }
 }

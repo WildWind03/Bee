@@ -36,7 +36,7 @@
                         android:contentDescription="@string/content_description"
                         android:fitsSystemWindows="true"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/kuzina"/>
+                        android:src="@drawable/kuzina_latte"/>
 
                 <TextView
                         android:id="@+id/organisation_name"

@@ -10,7 +10,7 @@ public class LoadProductsInCategorySingleton {
     private static final Logger logger = Logger.getLogger(LoadProductsInCategorySingleton.class.getName());
 
     private static class SingletonHolder {
-        private final static String DEFAULT_SITE = "http://androidtraining.noveogroup.com";
+        private final static String DEFAULT_SITE = "http://192.168.1.24:8080";
         public static LoadProductsInCategoryService instance;
 
         static {

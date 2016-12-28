@@ -18,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindView;
 import com.bee.client.entity.Comment;
 import com.bee.client.entity.Product;
@@ -29,7 +30,9 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Formatter;
 import java.util.logging.Logger;
 
 public class ProductInfoFragment extends BaseFragment implements SensorEventListener {
@@ -127,7 +130,7 @@ public class ProductInfoFragment extends BaseFragment implements SensorEventList
 
         Product product = getArguments().getParcelable(PRODUCT_TAG);
         organisationName.setText(getString(R.string.organisation_pattern, getString(R.string.organisation_string), product.getOrganisation()));
-        averageRate.setText(getString(R.string.product_rating_pattern, getString(R.string.rating), product.getAverageRate()));
+        averageRate.setText(String.format("%s : %.2f/5", getString(R.string.rating), product.getAverageRate()));
         description.setText(product.getDescription());
 
         LoadProductCommentsSingleton
@@ -143,7 +146,7 @@ public class ProductInfoFragment extends BaseFragment implements SensorEventList
 
                     @Override
                     public void onError(Throwable e) {
-
+                        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                     }
 
                     @Override
@@ -156,9 +159,9 @@ public class ProductInfoFragment extends BaseFragment implements SensorEventList
 
         Glide
                 .with(this)
-                .load(DEFAULT_SITE + "/" + product.getOrganisation() + "/" + product.getName() + "/image")
+                .load("nsu.ru")
                 .centerCrop()
-                .placeholder(R.drawable.placeholder)
+                .placeholder(R.drawable.papa_pepperoni)
                 .into(productImage);
 
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);

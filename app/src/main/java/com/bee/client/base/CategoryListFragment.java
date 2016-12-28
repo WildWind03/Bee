@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindView;
 import com.bee.client.entity.Category;
 import com.nsu.alexander.apptemplate.BaseFragment;
@@ -108,8 +109,6 @@ public class CategoryListFragment extends BaseFragment {
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.choose_category_str);
 
-        categoryList.setLayoutManager(new LinearLayoutManager(getContext()));
-
         loadCategoriesService
                 .loadCategories()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -122,12 +121,13 @@ public class CategoryListFragment extends BaseFragment {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                     }
 
                     @Override
                     public void onNext(List<Category> categories) {
                         categoryList.setAdapter(new CategoryListAdapter(categories));
+                        categoryList.setLayoutManager(new LinearLayoutManager(getContext()));
                     }
                 });
 
