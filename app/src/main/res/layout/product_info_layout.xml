@@ -35,7 +35,7 @@
                         android:layout_height="200dp"
                         android:contentDescription="@string/content_description"
                         android:fitsSystemWindows="true"
-                        android:scaleType="centerCrop"
+                        android:scaleType="fitXY"
                         android:src="@drawable/kuzina_latte"/>
 
                 <TextView

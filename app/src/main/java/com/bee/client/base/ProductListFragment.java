@@ -39,8 +39,8 @@ public class ProductListFragment extends BaseFragment {
         }
 
         @Override
-        public ProductListFragment.ProductListAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_item, parent, false);
+        public ProductListAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
+            final View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_item, parent, false);
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -94,8 +94,6 @@ public class ProductListFragment extends BaseFragment {
 
         LoadProductsInCategoryService loadProductsInCategoryService = LoadProductsInCategorySingleton.getInstance();
 
-        productList.setLayoutManager(new LinearLayoutManager(getContext()));
-
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.choose_product_str);
 
@@ -116,7 +114,8 @@ public class ProductListFragment extends BaseFragment {
 
                     @Override
                     public void onNext(List<Product> products) {
-                        productList.setAdapter(new ProductListFragment.ProductListAdapter(products));
+                        productList.setAdapter(new ProductListAdapter(products));
+                        productList.setLayoutManager(new LinearLayoutManager(getContext()));
                     }
                 });
     }
